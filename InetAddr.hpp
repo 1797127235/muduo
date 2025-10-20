@@ -1,4 +1,5 @@
 #pragma once
+#include <stdexcept>
 #include<sys/types.h>
 #include<netinet/in.h>
 #include<arpa/inet.h>
@@ -26,7 +27,11 @@ public:
         _port = port;
         _addr.sin_family = AF_INET;
         _addr.sin_port = htons(_port);
-        _addr.sin_addr.s_addr = inet_addr(ip.c_str());
+        
+        if(::inet_pton(AF_INET,ip.c_str(),&_addr.sin_addr) <= 0)
+        {
+            throw std::invalid_argument("InetAddr: invalid IPv4 address: " + ip);
+        }
     }
 
     std::string Ip() const
@@ -60,7 +65,7 @@ public:
     }
 
 private:
-    struct sockaddr_in _addr;
+    struct sockaddr_in _addr{};
     std::string _ip;
     uint16_t _port;
 };
