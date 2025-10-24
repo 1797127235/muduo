@@ -43,8 +43,16 @@ public:
 
     ~Socket() { close_if_valid(); }
 
+
     int fd() const noexcept { return _fd; }
     bool valid() const noexcept { return _fd >= 0; }
+
+    // 释放所有权，让调用者接管 fd（不会自动关闭）
+    int Release() noexcept {
+        int fd = _fd;
+        _fd = -1;
+        return fd;
+    }
 
     // 创建 TCP 套接字
     bool Create(bool nonblock = true, bool cloexec = true) {
@@ -74,7 +82,7 @@ public:
 
     // 服务器：Bind + Listen
     bool BuildListenSocket(uint16_t port, int backlog = DEFAULT_BACKLOG, bool reuse_port = true) {
-        if (!Create(/*nonblock*/true, /*cloexec*/true)) return false;
+        if (!Create(true, true)) return false;
         if (!SetReuseAddress(true)) return false;
         if (reuse_port) SetReusePort(true); // 非致命
 
@@ -85,7 +93,7 @@ public:
 
     // 客户端：Create + Connect(ip:port)
     bool BuildClientSocket(const std::string& ip, uint16_t port) {
-        if (!Create(/*nonblock*/false, /*cloexec*/true)) return false;
+        if (!Create(false, true)) return false;
         return Connect(ip, port);
     }
 

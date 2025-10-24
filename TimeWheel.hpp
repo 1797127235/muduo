@@ -9,7 +9,7 @@
 #include"Channel.hpp"
 #include"Log.hpp"
 using namespace log_ns;
-//定時器對象
+//定時器對象(秒級別)
 
 using TaskFunc = std::function<void()>;
 using ReleaseFunc = std::function<void()>;
@@ -125,7 +125,7 @@ class TimerWheel {
             _wheel[_tick].clear();//清空指定位置的数组，就会把数组中保存的所有管理定时器对象的shared_ptr释放掉
         }
 
-
+        //存在線程安全問題，只能在EventLoop線程中調用
         bool HasTimer(uint64_t id)
         {
             auto it = _timers.find(id);
@@ -155,6 +155,7 @@ class TimerWheel {
                 return;//没找着定时任务，没法刷新，没法延迟
             }
             PtrTask pt = it->second.lock();//lock获取weak_ptr管理的对象对应的shared_ptr
+            if (!pt) return; // 对象已被释放，不能刷新
             int delay = pt->DelayTime();
             int pos = (_tick + delay) % _capacity;
             _wheel[pos].push_back(pt);
@@ -169,8 +170,10 @@ class TimerWheel {
             if (pt) pt->Cancel();
         } 
 
-
+        //添加定時任務
         void TimerAdd(uint64_t id, uint32_t delay, const TaskFunc &cb);
+        //刷新/延迟定时任务
         void TimerRefresh(uint64_t id);
+        //取消定時任務
         void TimerCancel(uint64_t id);
 };

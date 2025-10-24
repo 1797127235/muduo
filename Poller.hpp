@@ -9,7 +9,7 @@
 using namespace log_ns;
 
 const uint64_t MAX_EPOLLEVENTS = 1024;
-
+//添加修改刪除監控事件  
 class Poller {
 public:
     Poller()
@@ -24,7 +24,9 @@ public:
     ~Poller()
     {
         if(_epfd > 0)
-        close(_epfd);
+        {
+            close(_epfd);
+        }
     }
 
     //添加或修改描述符事件监控
@@ -60,7 +62,7 @@ public:
         int nfds = ::epoll_wait(_epfd,_events,MAX_EPOLLEVENTS,-1);
         if(nfds < 0)
         {
-            if(errno == EINTR) return;
+            if(errno == EINTR) return;\
             LOG(ERROR,"epoll_wait error:%d(%s)",errno,strerror(errno));
             abort();
         }

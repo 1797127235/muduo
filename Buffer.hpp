@@ -15,7 +15,7 @@ const uint64_t BUFFER_DEFAULT_SIZE = 1024;
 
 class Buffer
 {
-private:
+public:
     char* Begin() {return &*_buffer.begin();}
     //获取写入位置
     char* WritePosition() {return Begin() + _writeIndex;}
@@ -143,7 +143,6 @@ public:
 
         std:: string line;
         ReadString(&line,pos - ReadPosition() + 1);
-
         return line;
     }
 

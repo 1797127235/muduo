@@ -94,6 +94,7 @@ namespace log_ns
                    lg._filenumber,
                    lg._curr_time.c_str(),
                    lg._message_info.c_str());
+            printf("\n");
         }
         void FlushLogToFile(const logmessage &lg)
         {
@@ -101,7 +102,7 @@ namespace log_ns
             if (!out.is_open())
                 return;
             char logtxt[2048];
-            snprintf(logtxt, sizeof(logtxt), "[%s][%d][%s][%d][%s] %s",
+            snprintf(logtxt, sizeof(logtxt), "[%s][%d][%s][%d][%s] %s\n",
                      lg._level.c_str(),
                      lg._id,
                      lg._filename.c_str(),
