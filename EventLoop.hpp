@@ -110,13 +110,14 @@ public:
         while(!_quit.load(std::memory_order_relaxed))
         {
             std::vector<Channel*> activeChannels;
-            //监听活跃的监听事件
+            //监听活跃的监听事件 阻塞式
             _poller.Poll(&activeChannels);
             //遍歷活躍的channel
             for(auto& channel : activeChannels)
             {
                 channel->HandleEvent();
             }
+
             RunAllTask();
         }
         RunAllTask();

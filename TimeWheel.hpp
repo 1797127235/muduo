@@ -55,6 +55,7 @@ class TimerWheel {
             }
         }
 
+        //设置内核定时器
         static int CreateTimerFd()
         {
             int timerfd = timerfd_create(CLOCK_MONOTONIC,0);
@@ -81,6 +82,7 @@ class TimerWheel {
             return timerfd;
         }
 
+        //读取内核定时器
         int ReadTimerfd()
         {
             uint64_t exp;

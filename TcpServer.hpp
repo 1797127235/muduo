@@ -22,6 +22,7 @@ class TcpServer {
         EventLoop _baseloop;    //这是主线程的EventLoop对象，负责监听事件的处理
         Acceptor _acceptor;    //这是监听套接字的管理对象
         LoopThreadPool _pool;   //这是从属EventLoop线程池
+        
         std::unordered_map<uint64_t, PtrConnection> _conns;//保存管理所有连接对应的shared_ptr对象
         ConnectedCallback _connected_callback;
         MessageCallback _message_callback;

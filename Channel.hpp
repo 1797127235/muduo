@@ -38,22 +38,22 @@ public:
         return true;
     }
 
-        void HandleEvent()
-        {
-            if ((_revents & EPOLLIN) || (_revents & EPOLLRDHUP) || (_revents & EPOLLPRI)) {
-                /*不管任何事件，都调用的回调函数*/
-                if (_readCallback) _readCallback();
-            }
-            /*有可能会释放连接的操作事件，一次只处理一个*/
-            if (_revents & EPOLLOUT) {
-                if (_writeCallback) _writeCallback();
-            }else if (_revents & EPOLLERR) {
-                if (_errorCallback) _errorCallback();//一旦出错，就会释放连接，因此要放到前边调用任意回调
-            }else if (_revents & EPOLLHUP) {
-                if (_closeCallback) _closeCallback();
-            }
-            if (_eventCallback) _eventCallback();
+    void HandleEvent()
+    {
+        if ((_revents & EPOLLIN) || (_revents & EPOLLRDHUP) || (_revents & EPOLLPRI)) {
+            /*不管任何事件，都调用的回调函数*/
+            if (_readCallback) _readCallback();
         }
+        /*有可能会释放连接的操作事件，一次只处理一个*/
+        if (_revents & EPOLLOUT) {
+            if (_writeCallback) _writeCallback();
+        }else if (_revents & EPOLLERR) {
+            if (_errorCallback) _errorCallback();//一旦出错，就会释放连接，因此要放到前边调用任意回调
+        }else if (_revents & EPOLLHUP) {
+            if (_closeCallback) _closeCallback();
+        }
+        if (_eventCallback) _eventCallback();
+    }
 
     uint32_t Events()
     {

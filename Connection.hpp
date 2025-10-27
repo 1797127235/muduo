@@ -47,6 +47,7 @@ public:
           _channel(sockfd, loop),
           _state(CONNECTING)
     {
+        //设置事件回调
         _channel.SetReadCallback(std::bind(&Connection::HandleRead, this));
         _channel.SetWriteCallback(std::bind(&Connection::HandleWrite, this));
         _channel.SetCloseCallback(std::bind(&Connection::HandleClose, this));
@@ -224,9 +225,10 @@ private:
     }
 
     //处理写事件
-       void HandleWrite() {
-            //_out_buffer中保存的数据就是要发送的数据
-            ssize_t ret = _sock.NonBlockSend(_out_buffer.ReadPosition(), _out_buffer.ReadAbleSize());
+    void HandleWrite()
+    {
+        //_out_buffer中保存的数据就是要发送的数据
+        ssize_t ret = _sock.NonBlockSend(_out_buffer.ReadPosition(), _out_buffer.ReadAbleSize());
         if(ret < 0)
         {
             if(ret == -2)
@@ -240,16 +242,17 @@ private:
             }
             return Release();//这时候就是实际的关闭释放操作了。
         }
-            _out_buffer.MoveReadOffset(ret);//千万不要忘了，将读偏移向后移动
-            if (_out_buffer.ReadAbleSize() == 0) {
-                _channel.DisableWrite();// 没有数据待发送了，关闭写事件监控
-                //如果当前是连接待关闭状态，则有数据，发送完数据释放连接，没有数据则直接释放
-                if (_state == DISCONNECTING) {
-                    return Release();
-                }
+
+        _out_buffer.MoveReadOffset(ret);//千万不要忘了，将读偏移向后移动
+        if (_out_buffer.ReadAbleSize() == 0) {
+            _channel.DisableWrite();// 没有数据待发送了，关闭写事件监控
+            //如果当前是连接待关闭状态，则有数据，发送完数据释放连接，没有数据则直接释放
+            if (_state == DISCONNECTING) {
+                return Release();
             }
-            return;
         }
+        return;
+    }
 
     //处理关闭事件
     void HandleClose()
