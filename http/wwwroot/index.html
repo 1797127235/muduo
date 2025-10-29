@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录页面</title>
+    <style>
+        /* --- CSS 样式开始 --- */
+
+        /* 重置基本样式 */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+            background-color: #f0f2f5; /* 浅灰色背景 */
+        }
+
+        /* Flex 布局让登录框垂直水平居中 */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 登录容器样式 */
+        .login-container {
+            width: 350px;
+            padding: 2.5rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* 标题样式 */
+        .login-container h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        /* 表单组（标签 + 输入框） */
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left; /* 标签左对齐 */
+        }
+
+        .form-group label {
+            display: block; /* 标签单独占一行 */
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* 输入框样式 */
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            /* 确保 padding 不会撑大宽度 */
+            box-sizing: border-box; 
+        }
+
+        /* 登录按钮样式 */
+        .login-button {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #007bff; /* 蓝色主色调 */
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer; /* 鼠标悬停时显示小手 */
+            transition: background-color 0.3s ease; /* 渐变效果 */
+        }
+
+        /* 按钮悬停效果 */
+        .login-button:hover {
+            background-color: #0056b3; /* 悬停时颜色变深 */
+        }
+
+        /* 其他链接，例如“忘记密码” */
+        .extra-links {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .extra-links a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .extra-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* --- CSS 样式结束 --- */
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        
+        <form action="/login-process" method="post">
+            
+            <h2>用户登录</h2>
+
+            <div class="form-group">
+                <label for="username">用户名:</label>
+                <input type="text" id="username" name="username" placeholder="请输入您的用户名" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码:</label>
+                <input type="password" id="password" name="password" placeholder="请输入您的密码" required>
+            </div>
+
+            <button type="submit" class="login-button">登 录</button>
+
+            <div class="extra-links">
+                <a href="#">忘记密码?</a> | <a href="#">注册新账户</a>
+            </div>
+
+        </form>
+
+    </div>
+    </body>
+</html>
